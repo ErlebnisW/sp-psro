@@ -25,8 +25,8 @@ from ray.rllib.policy.torch_policy import LearningRateSchedule as TorchLR, \
     EntropyCoeffSchedule as TorchEntropyCoeffSchedule
 from ray.rllib.utils.framework import try_import_torch
 from ray.rllib.utils.test_utils import check_learning_achieved
-from ray.rllib.utils.tf_ops import explained_variance, make_tf_callable
-from ray.rllib.utils.torch_ops import convert_to_torch_tensor
+from ray.rllib.utils.tf_utils import explained_variance, make_tf_callable
+from ray.rllib.utils.torch_utils import convert_to_torch_tensor
 from ray.rllib.models import MODEL_DEFAULTS
 
 from ray.rllib.utils import merge_dicts
@@ -44,11 +44,11 @@ from grl.rl_apps.scenarios.psro_scenario import PSROScenario
 from grl.rl_apps.scenarios.ray_setup import init_ray_for_scenario
 from grl.rl_apps.scenarios.stopping_conditions import StoppingCondition
 from grl.rllib_tools.space_saving_logger import get_trainer_logger_creator
-from grl.envs.poker_4p_multi_agent_env import Poker4pMultiAgentEnv
+# from grl.envs.poker_4p_multi_agent_env import Poker4pMultiAgentEnv
 
 from grl.rllib_tools.policy_checkpoints import load_pure_strat
 from grl.rl_apps.psro.poker_utils import openspiel_policy_from_nonlstm_rllib_policy
-from grl.rl_apps.scenarios.trainer_configs.poker_4p_psro_configs import *
+# from grl.rl_apps.scenarios.trainer_configs.poker_4p_psro_configs import *
 from grl.rl_apps.tiny_bridge_4p_mappo import CCTrainer_4P, CCPPOTorchPolicy_4P
 
 from grl.utils.common import pretty_dict_str, datetime_str, ensure_dir
@@ -60,7 +60,7 @@ from grl.rl_apps.scenarios.trainer_configs.bridge_psro_configs import *
 from grl.algos.p2sro.payoff_table import PayoffTable
 from grl.algos.p2sro.p2sro_manager.utils import get_latest_metanash_strategies, PolicySpecDistribution
 from grl.rllib_tools.models.valid_actions_fcnet import get_valid_action_fcn_class_for_env
-from grl.rl_apps.centralized_critic_model import TorchCentralizedCriticModel
+# from grl.rl_apps.centralized_critic_model import TorchCentralizedCriticModel
 
 import pickle
 import matplotlib.pyplot as plt

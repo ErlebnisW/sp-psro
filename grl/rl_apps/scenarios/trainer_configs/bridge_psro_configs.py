@@ -13,7 +13,7 @@ from grl.rllib_tools.action_dists import TorchGaussianSquashedGaussian
 from grl.rllib_tools.models.valid_actions_fcnet import get_valid_action_fcn_class_for_env
 from grl.rllib_tools.valid_actions_epsilon_greedy import ValidActionsEpsilonGreedy
 
-from grl.envs.tiny_bridge_2p_multi_agent_env  import TinyBridge2pMultiAgentEnv
+# from grl.envs.tiny_bridge_2p_multi_agent_env  import TinyBridge2pMultiAgentEnv
 from grl.envs.tiny_bridge_4p_multi_agent_env  import TinyBridge4pMultiAgentEnv
 from grl.rllib_tools.models.valid_actions_fcnet import get_valid_action_fcn_class_for_env
 from grl.rl_apps.centralized_critic_model_kuhn import TorchCentralizedCriticModel
