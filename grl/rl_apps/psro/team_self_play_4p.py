@@ -115,7 +115,7 @@ def train_self_play(results_dir, scenario_name, print_train_results=True):
         "env_config": env_config,
         "gamma": 1.0,
         "num_gpus": 0,
-        "num_workers": 0,
+        "num_workers": 1,
         "num_envs_per_worker": 1,
         "multiagent": {
             "policies_to_train": [f"best_response_0", "best_response_1"],
@@ -157,7 +157,7 @@ if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--scenario', type=str)
+    parser.add_argument('--scenario', default="tiny_bridge_4p_psro",type=str)
 
     commandline_args = parser.parse_args()
 

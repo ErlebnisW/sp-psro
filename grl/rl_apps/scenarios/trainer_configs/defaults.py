@@ -177,7 +177,7 @@ GRL_DEFAULT_POKER_PPO_PARAMS = {
     "_fake_gpus": False,
     # Switch on Trajectory View API for PPO by default.
     # NOTE: Only supported for PyTorch so far.
-    "_use_trajectory_view_api": True,
+    # "_use_trajectory_view_api": True,
 
     # Prevent iterations from going lower than this time span
     "min_iter_time_s": 0,
@@ -265,7 +265,7 @@ GRL_DEFAULT_MULTI_GRID_PPO_PARAMS = {
     "_fake_gpus": False,
     # Switch on Trajectory View API for PPO by default.
     # NOTE: Only supported for PyTorch so far.
-    "_use_trajectory_view_api": True,
+    # "_use_trajectory_view_api": True,
 
     # Prevent iterations from going lower than this time span
     "min_iter_time_s": 0,
@@ -509,7 +509,7 @@ GRL_DEFAULT_ROBUST_MUJOCO_PARAMS = {
     "_fake_gpus": False,
     # Switch on Trajectory View API for PPO by default.
     # NOTE: Only supported for PyTorch so far.
-    "_use_trajectory_view_api": True,
+    # "_use_trajectory_view_api": True,
 
     "model": MODEL_DEFAULTS,
     "metrics_smoothing_episodes": 1000,

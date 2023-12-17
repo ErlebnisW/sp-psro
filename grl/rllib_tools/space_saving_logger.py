@@ -65,8 +65,8 @@ class SpaceSavingLogger(UnifiedLogger):
         if should_log_result:
             for _logger in self._loggers:
                 _logger.on_result(result)
-            self._log_syncer.set_worker_ip(result.get(NODE_IP))
-            self._log_syncer.sync_down_if_needed()
+            # self._log_syncer.set_worker_ip(result.get(NODE_IP))
+            # self._log_syncer.sync_down_if_needed()
 
 
 def get_trainer_logger_creator(base_dir: str,
@@ -90,6 +90,7 @@ def get_trainer_logger_creator(base_dir: str,
         return SpaceSavingLogger(config=config,
                                  logdir=logdir,
                                  should_log_result_fn=should_log_result_fn,
-                                 delete_hist_stats=delete_hist_stats)
+                                 delete_hist_stats=delete_hist_stats,
+                                 )
 
     return trainer_logger_creator

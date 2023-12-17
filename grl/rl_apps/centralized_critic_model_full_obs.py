@@ -8,11 +8,11 @@ from ray.rllib.models.torch.torch_modelv2 import TorchModelV2
 from ray.rllib.models.torch.fcnet import FullyConnectedNetwork as TorchFC
 from ray.rllib.utils.annotations import override
 from ray.rllib.utils.framework import try_import_torch
+from ray.rllib.models import ModelCatalog
 
 from grl.rllib_tools.models.valid_actions_fcnet import get_valid_action_fcn_class
 
 torch, nn = try_import_torch()
-
 
 class TorchCentralizedCriticModelFullObs(TorchModelV2, nn.Module):
     """Multi-agent model that implements a centralized VF."""
@@ -28,13 +28,13 @@ class TorchCentralizedCriticModelFullObs(TorchModelV2, nn.Module):
         # self.action_dim = 7
 
         # tiny bridge 4p
-        # self.obs_dim = 84
-        # self.action_dim = 9
+        self.obs_dim = 84
+        self.action_dim = 9
 
         # kuhn 4p
-        self.obs_dim = 23
-        self.action_dim = 2
-        input_size = (self.obs_dim + self.action_dim)*4 + self.action_dim*3
+        # self.obs_dim = 23
+        # self.action_dim = 2
+        # input_size = (self.obs_dim + self.action_dim)*4 + self.action_dim*3
 
         # goofspiel 4p
         # self.obs_dim = 61
@@ -50,7 +50,7 @@ class TorchCentralizedCriticModelFullObs(TorchModelV2, nn.Module):
                                                        name)
         ### can figure this out by renaming this and never instantiate self. model
         # Central VF maps (obs, opp_obs, opp_act) -> vf_pred
-        # input_size = 29 + 29 + 7  # obs + opp_obs + opp_act
+        input_size = 399  # obs + opp_obs + opp_act
         self.central_vf = nn.Sequential(
             SlimFC(input_size, 16, activation_fn=nn.Tanh),
             SlimFC(16, 1),
@@ -91,3 +91,5 @@ class TorchCentralizedCriticModelFullObs(TorchModelV2, nn.Module):
     @override(ModelV2)
     def value_function(self):
         return self.model.value_function()  # not used
+    
+ModelCatalog.register_custom_model("cc_model_full_obs", TorchCentralizedCriticModelFullObs)

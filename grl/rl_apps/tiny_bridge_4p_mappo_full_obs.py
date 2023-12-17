@@ -39,7 +39,7 @@ from ray.rllib.models import MODEL_DEFAULTS
 from ray.rllib.policy.torch_policy import TorchPolicy
 
 from ray.rllib.utils import merge_dicts
-from grl.envs.tiny_bridge_2p_multi_agent_env  import TinyBridge2pMultiAgentEnv
+# from grl.envs.tiny_bridge_2p_multi_agent_env  import TinyBridge2pMultiAgentEnv
 from grl.rllib_tools.models.valid_actions_fcnet import get_valid_action_fcn_class_for_env
 from grl.rl_apps.centralized_critic_model_full_obs import TorchCentralizedCriticModelFullObs
 from grl.rl_apps.centralized_critic_model_full_obs_larger_network import TorchCentralizedCriticModelFullObsLargerModel
@@ -218,7 +218,8 @@ def central_vf_stats(policy, train_batch):
         "entropy": policy._mean_entropy,
         "entropy_coeff": policy.entropy_coeff,
     }
-    return merge_dicts(new_dict, old_dict)
+    # return merge_dicts(new_dict, old_dict)
+    return old_dict
 
 def new_func(policy, obs_space, action_space, config):
     CentralizedValueMixin.__init__(policy)
@@ -228,7 +229,7 @@ CCPPOTorchPolicy_4P_full_obs = PPOTorchPolicy.with_updates(
     postprocess_fn=centralized_critic_postprocessing_4p_full_obs,
     loss_fn=loss_with_central_critic,
     before_init=setup_torch_mixins,
-    stats_fn=central_vf_stats,
+    # stats_fn=central_vf_stats,
     after_init=new_func,
     mixins=[
         TorchLR, TorchEntropyCoeffSchedule, TorchKLCoeffMixin,
