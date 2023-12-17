@@ -38,7 +38,7 @@ def psro_tiny_bridge_ccppo_params(env: MultiAgentEnv) -> Dict[str, Any]:
         "gamma": 1.0,
         "kl_coeff": 0.2,
         "kl_target": 0.001,
-        "lr": 5e-5,
+        "lr": 5e-4,
         "metrics_smoothing_episodes": 5000,
         "model": {
             "custom_model": "cc_model_full_obs",
@@ -49,13 +49,13 @@ def psro_tiny_bridge_ccppo_params(env: MultiAgentEnv) -> Dict[str, Any]:
         "num_gpus": int(os.environ.get("RLLIB_NUM_GPUS", "0")),
         "num_gpus_per_worker": 0.0,
         "num_sgd_iter": 10,
-        "rollout_fragment_length": 256,
-        "sgd_minibatch_size": 256,
-        "train_batch_size": 4096,
+        "rollout_fragment_length": 128,
+        "sgd_minibatch_size": 128,
+        "train_batch_size": 12800,
         "vf_clip_param": 5.0,
         "vf_share_layers": False,
         "framework": "torch",
-        "num_workers": 25,
+        "num_workers": 100,
 
     }
     return merge_dicts(GRL_DEFAULT_POKER_PPO_PARAMS, config)
