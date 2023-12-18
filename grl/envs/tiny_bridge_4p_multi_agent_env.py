@@ -184,10 +184,11 @@ class TinyBridge4pMultiAgentEnv(ValidActionsMultiAgentEnv):
         if player_action not in legal_actions:
             legal_actions_mask = np.zeros(self.openspiel_env.action_spec()["num_actions"])
             legal_actions_mask[legal_actions] = 1.0
-            raise ValueError(f"illegal actions are not allowed.\n"
-                             f"Action was {player_action}.\n"
-                             f"Legal actions are {legal_actions}\n"
-                             f"Legal actions vector is {legal_actions_mask}")
+            # raise ValueError(f"illegal actions are not allowed.\n"
+            #                  f"Action was {player_action}.\n"
+            #                  f"Legal actions are {legal_actions}\n"
+            #                  f"Legal actions vector is {legal_actions_mask}")
+            player_action = random.choice(legal_actions)  # Choose a legal action randomly
         try:
             self.curr_time_step = self.openspiel_env.step([player_action])
         except SpielError:
@@ -255,7 +256,17 @@ class TinyBridge4pMultiAgentEnv(ValidActionsMultiAgentEnv):
 
         return obs, rewards, dones, infos
 
-
-
-
 register_env(TINY_BRIDGE_4P_ENV, lambda env_config: TinyBridge4pMultiAgentEnv(env_config)) ####
+
+if __name__ == "__main__":
+    env = TinyBridge4pMultiAgentEnv()
+    obs = env.reset()
+    while True:
+        obs, rewards, dones, infos = env.step({0: 60, 1: 60, 2: 60, 3: 60})
+        # breakpoint()
+        print(obs)
+        print(rewards)
+        print(dones)
+        print(infos)
+        if dones["__all__"]:
+            break

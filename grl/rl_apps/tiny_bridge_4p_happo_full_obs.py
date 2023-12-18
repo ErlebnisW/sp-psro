@@ -215,7 +215,6 @@ HAPPOTorchPolicy_4P_full_obs = PPOTorchPolicy.with_updates(
         CentralizedValueMixin
     ])
 
-
 def get_policy_class(config):
     if config["framework"] == "torch":
         return HAPPOTorchPolicy_4P_full_obs

@@ -206,8 +206,8 @@ def train_psro_best_response(team: int, results_dir: str, scenario_name: str, ps
             result["scenario_name"] = trainer.scenario_name
             # ray.get(my_hparams.update.remote(result["timesteps_total"]))
             super().on_train_result(trainer=trainer, result=result, **kwargs)
-            trainer.workers.local_worker().policy_map["policy_to_anneal_eg_metanash"].kl_target = ray.get(my_hparams.get_value.remote())
-            trainer.workers.local_worker().policy_map["policy_to_anneal_eg_metanash"].entropy = ray.get(my_hparams.get_value.remote())
+            # trainer.workers.local_worker().policy_map["policy_to_anneal_eg_metanash"].kl_target = ray.get(my_hparams.get_value.remote())
+            # trainer.workers.local_worker().policy_map["policy_to_anneal_eg_metanash"].entropy = ray.get(my_hparams.get_value.remote())
 
         def on_episode_end(self, *, worker: RolloutWorker, base_env: BaseEnv,
                            policies: Dict[str, Policy], episode: MultiAgentEpisode,
@@ -363,7 +363,7 @@ def train_psro_best_response(team: int, results_dir: str, scenario_name: str, ps
 
             sync_active_policy_br_and_metanash_with_p2sro_manager(trainer=trainer,
                                                                   player=team,
-                                                                  metanash_player=other_player,
+                                                                  metanash_player=other_team,
                                                                   one_agent_plays_all_sides=single_agent_symmetric_game,
                                                                   p2sro_manager=p2sro_manager,
                                                                   mix_metanash_with_uniform_dist_coeff=mix_metanash_with_uniform_dist_coeff,

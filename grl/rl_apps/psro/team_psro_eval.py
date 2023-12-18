@@ -211,5 +211,6 @@ if __name__ == '__main__':
     launch_evals(scenario_name=scenario_name,
                  eval_dispatcher_port=eval_port,
                  eval_dispatcher_host=commandline_args.eval_host,
+                 team_game=True,
                  block=True,
                  ray_head_address=commandline_args.ray_head)

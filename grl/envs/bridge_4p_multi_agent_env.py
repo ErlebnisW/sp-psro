@@ -184,10 +184,11 @@ class BridgeMultiAgentEnv(ValidActionsMultiAgentEnv):
         if player_action not in legal_actions:
             legal_actions_mask = np.zeros(self.openspiel_env.action_spec()["num_actions"])
             legal_actions_mask[legal_actions] = 1.0
-            raise ValueError(f"illegal actions are not allowed.\n"
-                             f"Action was {player_action}.\n"
-                             f"Legal actions are {legal_actions}\n"
-                             f"Legal actions vector is {legal_actions_mask}")
+            # raise ValueError(f"illegal actions are not allowed.\n"
+            #                  f"Action was {player_action}.\n"
+            #                  f"Legal actions are {legal_actions}\n"
+            #                  f"Legal actions vector is {legal_actions_mask}")
+            player_action = random.choice(legal_actions)  # Choose a legal action randomly
         try:
             self.curr_time_step = self.openspiel_env.step([player_action])
         except SpielError:
