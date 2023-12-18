@@ -44,10 +44,10 @@ scenario_catalog.add(PSROScenario(
     # psro_get_stopping_condition= lambda: StopImmediately(),
     psro_get_stopping_condition=lambda: EpisodesSingleBRRewardPlateauStoppingCondition(
         br_policy_id="best_response",
-        dont_check_plateau_before_n_episodes=int(0.8e5),
-        check_plateau_every_n_episodes=int(0.8e5),
+        dont_check_plateau_before_n_episodes=int(3e4),
+        check_plateau_every_n_episodes=int(3e4),
         minimum_reward_improvement_otherwise_plateaued=0.01,
-        max_train_episodes=int(6e6),
+        max_train_episodes=int(1.2e5),
     ),
     calc_exploitability_for_openspiel_env=False,
 ))
