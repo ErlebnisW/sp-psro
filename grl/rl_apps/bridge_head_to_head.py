@@ -25,8 +25,8 @@ from ray.rllib.policy.torch_policy import LearningRateSchedule as TorchLR, \
     EntropyCoeffSchedule as TorchEntropyCoeffSchedule
 from ray.rllib.utils.framework import try_import_torch
 from ray.rllib.utils.test_utils import check_learning_achieved
-from ray.rllib.utils.tf_utils import explained_variance, make_tf_callable
-from ray.rllib.utils.torch_utils import convert_to_torch_tensor
+from ray.rllib.utils.tf_ops import explained_variance, make_tf_callable
+from ray.rllib.utils.torch_ops import convert_to_torch_tensor
 from ray.rllib.models import MODEL_DEFAULTS
 
 from ray.rllib.utils import merge_dicts
