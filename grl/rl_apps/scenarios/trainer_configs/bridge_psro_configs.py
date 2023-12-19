@@ -15,15 +15,52 @@ from grl.rllib_tools.valid_actions_epsilon_greedy import ValidActionsEpsilonGree
 
 # from grl.envs.tiny_bridge_2p_multi_agent_env  import TinyBridge2pMultiAgentEnv
 from grl.envs.tiny_bridge_4p_multi_agent_env  import TinyBridge4pMultiAgentEnv
+from grl.envs.poker_4p_multi_agent_env import Poker4PMultiAgentEnv
 from grl.rllib_tools.models.valid_actions_fcnet import get_valid_action_fcn_class_for_env
 from grl.rl_apps.centralized_critic_model_kuhn import TorchCentralizedCriticModel
-
+from grl.rl_apps.centralized_critic_model_full_obs_larger_network_kuhn import TorchCentralizedCriticModelFullObsLargerModelKuhn
+from grl.rl_apps.kuhn_4p_mappo_full_obs_larger import kuhn_CCTrainer_4P_full_obs_larger, kuhn_CCPPOTorchPolicy_4P_full_obs_larger
 from gym.spaces import Discrete
 
 from ray.rllib.models import ModelCatalog
 
 ModelCatalog.register_custom_model(
         "cc_model", TorchCentralizedCriticModel)
+
+def team_psro_kuhm_ccppo_params_larger(env: MultiAgentEnv) -> Dict[str, Any]:
+    env_config={
+        "version": "kuhn_4p",
+        "fixed_players": True,
+    }
+    tmp_env = Poker4PMultiAgentEnv(env_config)
+    config = {
+        "clip_param": 0.03,
+        "entropy_coeff": 0.00,
+        "framework": "torch",
+        "gamma": 1.0,
+        "kl_coeff": 0.2,
+        "kl_target": 0.001,
+        "lr": 5e-4,
+        "metrics_smoothing_episodes": 5000,
+        "model": {
+            "custom_model": "cc_model_full_obs_larger",
+            "vf_share_layers": False
+        },
+        "batch_mode": "complete_episodes",
+        "num_envs_per_worker": 1,
+        "num_gpus": int(os.environ.get("RLLIB_NUM_GPUS", "0")),
+        "num_gpus_per_worker": 0.0,
+        "num_sgd_iter": 10,
+        "rollout_fragment_length": 256,
+        "sgd_minibatch_size": 256,
+        "train_batch_size": 4096,
+        "vf_clip_param": 5.0,
+        "vf_share_layers": False,
+        "framework": "torch",
+        "num_workers": 25,
+
+    }
+    return merge_dicts(GRL_DEFAULT_POKER_PPO_PARAMS, config)
 
 def psro_tiny_bridge_ccppo_params(env: MultiAgentEnv) -> Dict[str, Any]:
     env_config={
