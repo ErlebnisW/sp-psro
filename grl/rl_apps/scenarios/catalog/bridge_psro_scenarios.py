@@ -25,8 +25,9 @@ scenario_catalog.add(PSROScenario(
     ray_object_store_memory_cap_gigabytes=20,
     env_class=Poker4PMultiAgentEnv,
     env_config={
-        "version": "poker_4p",
+        "version": "kuhn_poker",
         "fixed_players": True,
+        "append_valid_actions_mask_to_obs": True,
     },
     mix_metanash_with_uniform_dist_coeff=0.0,
     allow_stochastic_best_responses=False,
@@ -42,14 +43,14 @@ scenario_catalog.add(PSROScenario(
     p2sro_payoff_table_exponential_avg_coeff=None,
     p2sro_sync_with_payoff_table_every_n_episodes=None,
     single_agent_symmetric_game=False,
-    get_trainer_config=psro_tiny_bridge_ccppo_params,
+    get_trainer_config=team_psro_kuhn_ccppo_params_larger,
     # psro_get_stopping_condition= lambda: StopImmediately(),
     psro_get_stopping_condition=lambda: EpisodesSingleBRRewardPlateauStoppingCondition(
         br_policy_id="best_response",
-        dont_check_plateau_before_n_episodes=int(3e4),
-        check_plateau_every_n_episodes=int(3e4),
+        dont_check_plateau_before_n_episodes=int(0.8e5),
+        check_plateau_every_n_episodes=int(0.8e5),
         minimum_reward_improvement_otherwise_plateaued=0.01,
-        max_train_episodes=int(1.2e5),
+        max_train_episodes=int(6e5),
     ),
     calc_exploitability_for_openspiel_env=False,
 ))
@@ -82,10 +83,10 @@ scenario_catalog.add(PSROScenario(
     # psro_get_stopping_condition= lambda: StopImmediately(),
     psro_get_stopping_condition=lambda: EpisodesSingleBRRewardPlateauStoppingCondition(
         br_policy_id="best_response",
-        dont_check_plateau_before_n_episodes=int(3e4),
-        check_plateau_every_n_episodes=int(3e4),
+        dont_check_plateau_before_n_episodes=int(0.8e5),
+        check_plateau_every_n_episodes=int(0.8e5),
         minimum_reward_improvement_otherwise_plateaued=0.01,
-        max_train_episodes=int(1.2e5),
+        max_train_episodes=int(6e6),
     ),
     calc_exploitability_for_openspiel_env=False,
 ))

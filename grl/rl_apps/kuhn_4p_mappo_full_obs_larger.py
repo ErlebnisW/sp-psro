@@ -193,34 +193,34 @@ def setup_torch_mixins(policy, obs_space, action_space, config):
     TorchLR.__init__(policy, config["lr"], config["lr_schedule"])
 
 
-def central_vf_stats(policy, train_batch):
-    # Report the explained variance of the central value function.
-    # extra_grad_dict = TorchPolicy.extra_grad_info(policy, train_batch)
-    new_dict = {
-        "central_vf_explained_var": explained_variance(
-            train_batch[Postprocessing.VALUE_TARGETS],
-            policy._central_value_out),
-    }
-    old_dict = {
-        "cur_kl_coeff": policy.kl_coeff,
-        "cur_lr": policy.cur_lr,
-        "total_loss": policy._total_loss,
-        "policy_loss": policy._mean_policy_loss,
-        "vf_loss": policy._mean_vf_loss,
-        "vf_explained_var": explained_variance(
-            train_batch[Postprocessing.VALUE_TARGETS],
-            policy.model.value_function()),
-        "kl": policy._mean_kl,
-        "entropy": policy._mean_entropy,
-        "entropy_coeff": policy.entropy_coeff,
-    }
-    return merge_dicts(new_dict, old_dict)
+# def central_vf_stats(policy, train_batch):
+#     # Report the explained variance of the central value function.
+#     # extra_grad_dict = TorchPolicy.extra_grad_info(policy, train_batch)
+#     new_dict = {
+#         "central_vf_explained_var": explained_variance(
+#             train_batch[Postprocessing.VALUE_TARGETS],
+#             policy._central_value_out),
+#     }
+#     old_dict = {
+#         "cur_kl_coeff": policy.kl_coeff,
+#         "cur_lr": policy.cur_lr,
+#         "total_loss": policy._total_loss,
+#         "policy_loss": policy._mean_policy_loss,
+#         "vf_loss": policy._mean_vf_loss,
+#         "vf_explained_var": explained_variance(
+#             train_batch[Postprocessing.VALUE_TARGETS],
+#             policy.model.value_function()),
+#         "kl": policy._mean_kl,
+#         "entropy": policy._mean_entropy,
+#         "entropy_coeff": policy.entropy_coeff,
+#     }
+#     return merge_dicts(new_dict, old_dict)
 
 kuhn_CCPPOTorchPolicy_4P_full_obs_larger = PPOTorchPolicy.with_updates(
     name="kuhnCCPPOTorchPolicyLarger",
     postprocess_fn=centralized_critic_postprocessing_4p_full_obs,
     loss_fn=loss_with_central_critic,
-    stats_fn=central_vf_stats,
+    # stats_fn=central_vf_stats,
     before_init=setup_torch_mixins,
     after_init=new_func,
     mixins=[

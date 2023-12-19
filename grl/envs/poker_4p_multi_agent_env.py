@@ -275,7 +275,7 @@ class Poker4PMultiAgentEnv(ValidActionsMultiAgentEnv):
         dones = {self.player_map(new_curr_player_id): done, "__all__": done}
 
         if done: ### always return rewards and infos for both players
-            rewards = {self.player_map(i): self.curr_time_step.rewards[i]/REWARD_NORMALIZATION for i in range(4)}
+            rewards = {self.player_map(i): self.curr_time_step.rewards[i] for i in range(4)}
 
             # assert self.curr_time_step.rewards[0] == -self.curr_time_step.rewards[1] # should not be the case since it's coorperative
 
