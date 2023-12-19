@@ -27,7 +27,7 @@ from ray.rllib.models import ModelCatalog
 ModelCatalog.register_custom_model(
         "cc_model", TorchCentralizedCriticModel)
 
-def team_psro_kuhm_ccppo_params_larger(env: MultiAgentEnv) -> Dict[str, Any]:
+def team_psro_kuhn_ccppo_params_larger(env: MultiAgentEnv) -> Dict[str, Any]:
     env_config={
         "version": "kuhn_4p",
         "fixed_players": True,
