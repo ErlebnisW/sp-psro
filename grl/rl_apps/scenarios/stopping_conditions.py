@@ -63,7 +63,7 @@ class SingleBRRewardPlateauStoppingCondition(StoppingCondition):
                     logger.info(
                         f"Improvement since last saturation check: {improvement_since_last_check}, minimum target is "
                         f"{self.minimum_reward_improvement_otherwise_saturated}.")
-                    if improvement_since_last_check < self.minimum_reward_improvement_otherwise_saturated:
+                    if -self.minimum_reward_improvement_otherwise_saturated / 10 < improvement_since_last_check < self.minimum_reward_improvement_otherwise_saturated:
                         # We're no longer improving. Assume we have saturated, and stop training.
                         logger.info(f"Improvement target not reached, stopping training if allowed.")
                         should_stop = True
