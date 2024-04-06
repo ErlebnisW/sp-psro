@@ -461,4 +461,5 @@ if __name__ == "__main__":
             previous_br_checkpoint_path=previous_br_checkpoint_path
         )
         if use_prev_brs:
+            print("use previous brs")
             previous_br_checkpoint_path = result

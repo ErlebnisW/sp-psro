@@ -71,8 +71,8 @@ class TorchCentralizedCriticModelFullObs(TorchModelV2, nn.Module):
             "gamma": 1.0,
             "kl_coeff": 0.2,
             "kl_target": 0.001,
-            "critic_lr": 5e-4,
-            "actor_lr":5e-4,
+            "critic_lr": 5e-5,
+            "actor_lr":5e-5,
             "metrics_smoothing_episodes": 5000,
             "model": {
                 "custom_model": "cc_model_full_obs",

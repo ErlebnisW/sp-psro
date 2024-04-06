@@ -8,7 +8,7 @@ from grl.rl_apps.scenarios.psro_scenario import PSROScenario
 from grl.rl_apps.scenarios.stopping_conditions import *
 from grl.rl_apps.scenarios.trainer_configs.poker_psro_configs import *
 from grl.rllib_tools.modified_policies.simple_q_torch_policy import SimpleQTorchPolicyPatched, SimpleQTorchPolicyPatchedSoftMaxSampling
-from grl.rllib_tools.modified_policies.mixed_class_eval_policy import MixedClassEvalPolicyDQN, MixedClassEvalPolicyDQNDebug, MixedClassEvalPolicyDQNDebugSameInstance, MixedClassEvalPolicyDQNSoftmax, MixedClassEvalPolicyPPO
+# from grl.rllib_tools.modified_policies.mixed_class_eval_policy import MixedClassEvalPolicyDQN, MixedClassEvalPolicyDQNDebug, MixedClassEvalPolicyDQNDebugSameInstance, MixedClassEvalPolicyDQNSoftmax, MixedClassEvalPolicyPPO
 from grl.rllib_tools.modified_policies.discrete_ppo_torch_policy_with_action_prob_outs import DiscretePPOTorchPolicyWithActionProbsOuts
 
 scenario_catalog.add(PSROScenario(

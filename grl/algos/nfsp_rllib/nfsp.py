@@ -2,7 +2,8 @@ import logging
 from typing import Optional, Type, Callable
 
 import ray
-from ray.rllib.agents.trainer import with_common_config
+from ray.rllib.algorithms.algorithm import with_common_config
+from ray.rllib.algorithms
 from ray.rllib.agents.trainer_template import build_trainer
 from ray.rllib.evaluation.worker_set import WorkerSet
 from ray.rllib.execution.metric_ops import StandardMetricsReporting

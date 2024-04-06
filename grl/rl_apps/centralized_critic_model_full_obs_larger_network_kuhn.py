@@ -13,6 +13,7 @@ from grl.rllib_tools.models.valid_actions_fcnet import get_valid_action_fcn_clas
 
 torch, nn = try_import_torch()
 
+from torch.optim import Adam
 
 class TorchCentralizedCriticModelFullObsLargerModelKuhn(TorchModelV2, nn.Module):
     """Multi-agent model that implements a centralized VF."""
@@ -59,6 +60,45 @@ class TorchCentralizedCriticModelFullObsLargerModelKuhn(TorchModelV2, nn.Module)
             SlimFC(input_size, 32, activation_fn=nn.ReLU),
             SlimFC(32, 1),
         )
+        
+        self.custom_config = {
+            "clip_param": 0.03,
+            "entropy_coeff": 0.00,
+            "framework": "torch",
+            "gamma": 1.0,
+            "kl_coeff": 0.2,
+            "kl_target": 0.001,
+            "critic_lr": 5e-4,
+            "actor_lr":5e-4,
+            "metrics_smoothing_episodes": 5000,
+            "model": {
+                "custom_model": "cc_model_full_obs",
+                "vf_share_layers": False
+            },
+            "batch_mode": "complete_episodes",
+            "num_envs_per_worker": 1,
+            # "num_gpus": int(os.environ.get("RLLIB_NUM_GPUS", "0")),
+            "num_gpus_per_worker": 0.0,
+            "num_sgd_iter": 10,
+            "rollout_fragment_length": 256,
+            "sgd_minibatch_size": 256,
+            "train_batch_size": 4096,
+            "vf_clip_param": 5.0,
+            "vf_share_layers": False,
+            "framework": "torch",
+            "num_workers": 25,
+
+        }
+        self.other_policies = {}
+        self.actor_optimizer = Adam(params=self.parameters(), lr=self.custom_config["actor_lr"])
+        
+        def init_(m, value):
+            def init(module, weight_init, bias_init, gain=1):
+                weight_init(module.weight.data, gain=gain)
+                bias_init(module.bias.data)
+                return module
+
+            return init(m, nn.init.orthogonal_, lambda x: nn.init.constant_(x, 0), value)
 
     @override(ModelV2)
     def forward(self, input_dict, state, seq_lens):
@@ -89,3 +129,27 @@ class TorchCentralizedCriticModelFullObsLargerModelKuhn(TorchModelV2, nn.Module)
     @override(ModelV2)
     def value_function(self):
         return self.model.value_function()  # not used
+    
+    def link_other_agent_policy(self, agent_id, policy):
+        if agent_id in self.other_policies:
+            if self.other_policies[agent_id] != policy:
+                raise ValueError('the policy is not same with the two time look up')
+        else:
+            self.other_policies[agent_id] = policy
+    
+    def update_actor(self, loss, lr, grad_clip):
+        TorchCentralizedCriticModelFullObsLargerModelKuhn.update_use_torch_adam(
+            loss=(-1 * loss),
+            optimizer=self.actor_optimizer,
+            parameters=self.parameters(),
+            grad_clip=grad_clip
+        )
+
+    @staticmethod
+    def update_use_torch_adam(loss, parameters, optimizer, grad_clip):
+        optimizer.zero_grad()
+        loss.backward()
+        # total_norm = torch.norm(torch.stack([torch.norm(p.grad) for p in parameters if p.grad is not None]))
+        if grad_clip is not None: 
+            torch.nn.utils.clip_grad_norm_(parameters, grad_clip)
+        optimizer.step()

@@ -154,3 +154,7 @@ fabric.properties
 
 # images ignored by default
 *.png
+
+*.json
+
+/grl/assets/

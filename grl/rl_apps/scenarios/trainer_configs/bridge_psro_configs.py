@@ -30,7 +30,7 @@ ModelCatalog.register_custom_model(
 ModelCatalog.register_custom_model(
         "kuhn_cc_model_full_obs_larger", TorchCentralizedCriticModelFullObsLargerModelKuhn)
 
-def team_psro_kuhn_ccppo_params_larger(env: MultiAgentEnv) -> Dict[str, Any]:
+def s_psro_kuhn_ccppo_params_larger(env: MultiAgentEnv) -> Dict[str, Any]:
     env_config={
         "version": "kuhn_poker",
         "fixed_players": True,
@@ -38,7 +38,7 @@ def team_psro_kuhn_ccppo_params_larger(env: MultiAgentEnv) -> Dict[str, Any]:
     tmp_env = Poker4PMultiAgentEnv(env_config)
     config = {
         "clip_param": 0.03,
-        "entropy_coeff": 0.01,
+        "entropy_coeff": 0.00,
         "framework": "torch",
         "gamma": 1.0,
         "kl_coeff": 0.2,
@@ -56,11 +56,46 @@ def team_psro_kuhn_ccppo_params_larger(env: MultiAgentEnv) -> Dict[str, Any]:
         "num_sgd_iter": 10,
         "rollout_fragment_length": 128,
         "sgd_minibatch_size": 128,
-        "train_batch_size": 640,
+        "train_batch_size": 3200,
         "vf_clip_param": 5.0,
         "vf_share_layers": False,
         "framework": "torch",
-        "num_workers": 5,
+        "num_workers": 25,
+
+    }
+    return merge_dicts(GRL_DEFAULT_POKER_PPO_PARAMS, config)
+
+def team_psro_kuhn_ccppo_params_larger(env: MultiAgentEnv) -> Dict[str, Any]:
+    env_config={
+        "version": "kuhn_poker",
+        "fixed_players": True,
+    }
+    tmp_env = Poker4PMultiAgentEnv(env_config)
+    config = {
+        "clip_param": 0.03,
+        "entropy_coeff": 0.00,
+        "framework": "torch",
+        "gamma": 1.0,
+        "kl_coeff": 0.2,
+        "kl_target": 0.001,
+        "lr": 5e-5,
+        "metrics_smoothing_episodes": 5000,
+        "model": {
+            "custom_model": "kuhn_cc_model_full_obs_larger",
+            "vf_share_layers": False
+        },
+        "batch_mode": "complete_episodes",
+        "num_envs_per_worker": 1,
+        "num_gpus": int(os.environ.get("RLLIB_NUM_GPUS", "0")),
+        "num_gpus_per_worker": 0.0,
+        "num_sgd_iter": 10,
+        "rollout_fragment_length": 128,
+        "sgd_minibatch_size": 128,
+        "train_batch_size": 3200,
+        "vf_clip_param": 5.0,
+        "vf_share_layers": False,
+        "framework": "torch",
+        "num_workers": 25,
 
     }
     return merge_dicts(GRL_DEFAULT_POKER_PPO_PARAMS, config)

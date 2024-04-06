@@ -9,14 +9,51 @@ from grl.rllib_tools.modified_policies.simple_q_torch_policy import SimpleQTorch
 from ray.rllib.agents.ppo import PPOTrainer, PPOTorchPolicy
 
 # from grl.envs.tiny_bridge_2p_multi_agent_env  import TinyBridge2pMultiAgentEnv
+from grl.envs.bridge_4p_multi_agent_env import BridgeMultiAgentEnv
 # from grl.rl_apps.tiny_bridge_2p_mappo import CCTrainer, CCPPOTorchPolicy
 from grl.rl_apps.tiny_bridge_4p_mappo import CCTrainer_4P, CCPPOTorchPolicy_4P
 from grl.rl_apps.tiny_bridge_4p_mappo_full_obs import CCTrainer_4P_full_obs, CCPPOTorchPolicy_4P_full_obs
 from grl.rl_apps.tiny_bridge_4p_happo_full_obs import HATrainer_4P_full_obs, HAPPOTorchPolicy_4P_full_obs
 from grl.rl_apps.tiny_bridge_4p_mappo_full_obs_larger import CCTrainer_4P_full_obs_larger, CCPPOTorchPolicy_4P_full_obs_larger
 from grl.rl_apps.kuhn_4p_mappo_full_obs_larger import kuhn_CCTrainer_4P_full_obs_larger, kuhn_CCPPOTorchPolicy_4P_full_obs_larger
-from grl.envs.bridge_4p_multi_agent_env import BridgeMultiAgentEnv
-from grl.envs.poker_4p_multi_agent_env import Poker4PMultiAgentEnv
+from grl.rl_apps.kuhn_4p_happo_full_obs_larger import kuhn_HATrainer_4P_full_obs_larger, kuhn_HAPPOTorchPolicy_4P_full_obs_larger
+
+scenario_catalog.add(PSROScenario(
+    name="kuhn_4p_s_psro",
+    ray_cluster_cpus=default_if_creating_ray_head(default=200),
+    ray_cluster_gpus=default_if_creating_ray_head(default=1),
+    ray_object_store_memory_cap_gigabytes=20,
+    env_class=Poker4PMultiAgentEnv,
+    env_config={
+        "version": "kuhn_poker",
+        "fixed_players": True,
+        "append_valid_actions_mask_to_obs": True,
+    },
+    mix_metanash_with_uniform_dist_coeff=0.0,
+    allow_stochastic_best_responses=False,
+    trainer_class=kuhn_HATrainer_4P_full_obs_larger,
+    policy_classes={
+        "metanash": kuhn_HAPPOTorchPolicy_4P_full_obs_larger,
+        "best_response":kuhn_HAPPOTorchPolicy_4P_full_obs_larger,
+        "eval": kuhn_HAPPOTorchPolicy_4P_full_obs_larger,
+    },
+    num_eval_workers=8,
+    games_per_payoff_eval=1000,
+    p2sro=False,
+    p2sro_payoff_table_exponential_avg_coeff=None,
+    p2sro_sync_with_payoff_table_every_n_episodes=None,
+    single_agent_symmetric_game=False,
+    get_trainer_config=s_psro_kuhn_ccppo_params_larger,
+    # psro_get_stopping_condition= lambda: StopImmediately(),
+    psro_get_stopping_condition=lambda: EpisodesSingleBRRewardPlateauStoppingCondition(
+        br_policy_id="best_response",
+        dont_check_plateau_before_n_episodes=int(2.5e4),
+        check_plateau_every_n_episodes=int(1e4),
+        minimum_reward_improvement_otherwise_plateaued=0.005,
+        max_train_episodes=int(6e5),
+    ),
+    calc_exploitability_for_openspiel_env=False,
+))
 
 scenario_catalog.add(PSROScenario(
     name="kuhn_4p",
@@ -47,9 +84,9 @@ scenario_catalog.add(PSROScenario(
     # psro_get_stopping_condition= lambda: StopImmediately(),
     psro_get_stopping_condition=lambda: EpisodesSingleBRRewardPlateauStoppingCondition(
         br_policy_id="best_response",
-        dont_check_plateau_before_n_episodes=int(0.8e5),
-        check_plateau_every_n_episodes=int(0.8e5),
-        minimum_reward_improvement_otherwise_plateaued=0.01,
+        dont_check_plateau_before_n_episodes=int(2.5e4),
+        check_plateau_every_n_episodes=int(1e4),
+        minimum_reward_improvement_otherwise_plateaued=0.005,
         max_train_episodes=int(6e5),
     ),
     calc_exploitability_for_openspiel_env=False,
@@ -93,8 +130,8 @@ scenario_catalog.add(PSROScenario(
 
 scenario_catalog.add(PSROScenario(
     name="tiny_bridge_4p_psro",
-    ray_cluster_cpus=default_if_creating_ray_head(default=64),
-    ray_cluster_gpus=default_if_creating_ray_head(default=0),
+    ray_cluster_cpus=default_if_creating_ray_head(default=200),
+    ray_cluster_gpus=default_if_creating_ray_head(default=1),
     ray_object_store_memory_cap_gigabytes=20,
     env_class=TinyBridge4pMultiAgentEnv,
     env_config={

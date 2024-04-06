@@ -152,22 +152,22 @@ def happo_surrogate_loss(
 
     mean_policy_loss = policies_loss / agent_num
 
-    if policy.config["use_critic"]:
-        prev_value_fn_out = train_batch[SampleBatch.VF_PREDS]  #
-        value_fn_out = model.value_function()  # same as values
-        vf_loss1 = torch.pow(
-            value_fn_out.to(device=get_device()) - train_batch[Postprocessing.VALUE_TARGETS].to(device=get_device()),
-            2.0)
-        vf_clipped = (prev_value_fn_out + torch.clamp(
-            value_fn_out - prev_value_fn_out, -policy.config["vf_clip_param"],
-            policy.config["vf_clip_param"])).to(device=get_device())
-        vf_loss2 = torch.pow(
-            vf_clipped.to(device=get_device()) - train_batch[Postprocessing.VALUE_TARGETS].to(device=get_device()), 2.0)
-        vf_loss = torch.max(vf_loss1, vf_loss2).to(device=get_device())
-        mean_vf_loss = reduce_mean_valid(vf_loss).to(device=get_device())
+    # if policy.config["use_critic"]:
+    prev_value_fn_out = train_batch[SampleBatch.VF_PREDS]  #
+    value_fn_out = model.value_function()  # same as values
+    vf_loss1 = torch.pow(
+        value_fn_out.to(device=get_device()) - train_batch[Postprocessing.VALUE_TARGETS].to(device=get_device()),
+        2.0)
+    vf_clipped = (prev_value_fn_out + torch.clamp(
+        value_fn_out - prev_value_fn_out, -policy.config["vf_clip_param"],
+        policy.config["vf_clip_param"])).to(device=get_device())
+    vf_loss2 = torch.pow(
+        vf_clipped.to(device=get_device()) - train_batch[Postprocessing.VALUE_TARGETS].to(device=get_device()), 2.0)
+    vf_loss = torch.max(vf_loss1, vf_loss2).to(device=get_device())
+    mean_vf_loss = reduce_mean_valid(vf_loss).to(device=get_device())
     # Ignore the value function.
-    else:
-        vf_loss = mean_vf_loss = 0.0
+    # else:
+    #     vf_loss = mean_vf_loss = 0.0
 
     model.value_function = vf_saved
     # recovery the value function.
