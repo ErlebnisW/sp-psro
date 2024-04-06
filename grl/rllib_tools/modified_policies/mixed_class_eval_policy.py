@@ -5,7 +5,7 @@ import gym
 from ray.rllib import Policy, SampleBatch
 from ray.rllib.utils.typing import ModelWeights, TensorType, TrainerConfigDict
 from grl.rllib_tools.modified_policies.simple_q_torch_policy import SimpleQTorchPolicyPatched, SimpleQTorchPolicyPatchedSoftMaxSampling
-from grl.algos.nfsp_rllib.nfsp_torch_avg_policy import NFSPTorchAveragePolicy
+# from grl.algos.nfsp_rllib.nfsp_torch_avg_policy import NFSPTorchAveragePolicy
 from grl.rllib_tools.modified_policies.discrete_ppo_torch_policy_with_action_prob_outs import DiscretePPOTorchPolicyWithActionProbsOuts
 class MixedClassEvalPolicy(Policy):
 

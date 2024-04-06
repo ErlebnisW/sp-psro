@@ -40,7 +40,7 @@ class SpaceSavingLogger(UnifiedLogger):
                                                 logdir=logdir,
                                                 trial=trial,
                                                 loggers=loggers,
-                                                sync_function=sync_function)
+                                                )
         self.print_log_dir = print_log_dir
         self.delete_hist_stats = delete_hist_stats
         self.should_log_result_fn = should_log_result_fn

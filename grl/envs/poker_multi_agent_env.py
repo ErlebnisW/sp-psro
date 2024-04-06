@@ -25,12 +25,12 @@ OSHI_ZUMO = "oshi_zumo"
 LIARS_DICE = "liars_dice"
 
 DEFAULT_CONFIG = {
-    'version': KUHN_POKER,
+    'version': LEDUC_POKER,
     'fixed_players': True,
     'dummy_action_multiplier': 1,
     'continuous_action_space': False,
     'penalty_for_invalid_actions': False,
-    'append_valid_actions_mask_to_obs': False,
+    'append_valid_actions_mask_to_obs': True,
 }
 
 OBS_SHAPES = {
